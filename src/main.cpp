@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include "timemachine.h"
+#include <Keypad.h>
 
 // Pin definitions
 const int LED_PIN = 13;        // Built-in LED on Arduino Uno
@@ -23,7 +24,21 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);  // Try 0x27 first, common address
 DIYables_4Digit7Segment_74HC595 display1(D1_SCLK, D1_RCLK, D1_DIO);
 DIYables_4Digit7Segment_74HC595 display2(D2_SCLK, D2_RCLK, D2_DIO);
 
-// Global variables
+/// Keypad setup
+const int ROW_NUM = 4; //four rows
+const int COLUMN_NUM = 3; //three columns
+
+char keys[ROW_NUM][COLUMN_NUM] = {
+  {'1','2','3'},
+  {'4','5','6'},
+  {'7','8','9'},
+  {'*','0','#'}
+};
+
+byte pin_rows[ROW_NUM] = {4, 5, 6, 7}; 
+byte pin_column[COLUMN_NUM] = {8, 9, 10};
+
+Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM );
 
 
 void setup() {
@@ -53,6 +68,11 @@ void setup() {
 }
 
 void loop() {
+  char key = keypad.getKey();
+
+  if (key){
+    Serial.println(key);
+  }
   
 
   // The above 1 second look is affecting the multiplexing timing - be aware
