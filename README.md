@@ -1,127 +1,74 @@
 # Arduino Uno Timemachine Project
 
-This project is set up for programming an Arduino Uno using PlatformIO in VS Code.
+## Required Libraries
 
-## Hardware Requirements
+The following libraries are required for this project and are automatically installed via PlatformIO:
 
-- Arduino Uno board
-- USB cable (A to B)
-- Optional: Breadboard, LEDs, resistors, sensors, buttons
+### LCD Display Library
 
-## Software Requirements
+- **marcoschwartz/LiquidCrystal_I2C@^1.1.4**
+  - Used for controlling the 20x4 I2C LCD display
+  - Handles initialization, text display, and backlight control
 
-- Visual Studio Code
-- PlatformIO extension for VS Code
-- Arduino drivers (usually auto-installed)
+### 7-Segment Display Library
 
-## Getting Started
+- **diyables/DIYables_4Digit7Segment_74HC595@^1.0.2**
+  - Used for controlling the two 4-digit 7-segment display modules
+  - Handles multiplexing and digit patterns for 74HC595 shift registers
+  - GitHub: https://github.com/DIYables/DIYables_4Digit7Segment_74HC595
 
-### 1. Install PlatformIO Extension
+### Keypad Library
 
-1. Open VS Code
-2. Go to Extensions (Ctrl+Shift+X)
-3. Search for "PlatformIO IDE"
-4. Install the extension by PlatformIO
+- **chris--a/Keypad@^3.1.1**
+  - Used for interfacing with the 3x4 matrix membrane keypad
+  - Handles key detection, debouncing, and event handling
+  - GitHub: https://github.com/Chris--A/Keypad
 
-### 2. Connect Your Arduino
+### Custom Library
 
-1. Connect your Arduino Uno to your computer via USB
-2. Note the COM port it's assigned to (check Device Manager on Windows)
+- **timemachine.h/cpp** (local library)
+  - Contains utility functions for LED patterns, button debouncing, and LCD time display
+  - Located in `lib/timemachine/` directory
 
-### 3. Build and Upload
+## Hardware Connections
 
-1. Open the project folder in VS Code
-2. PlatformIO will automatically detect the project
-3. Use the PlatformIO toolbar at the bottom or:
-   - **Build**: Click the checkmark (✓) or `Ctrl+Alt+B`
-   - **Upload**: Click the arrow (→) or `Ctrl+Alt+U`
-   - **Serial Monitor**: Click the plug icon or `Ctrl+Alt+S`
+### Arduino Uno Pin Assignments
 
-## Project Structure
+#### I2C LCD Display (20x4)
 
-```
-timemachine/
-├── src/
-│   └── main.cpp          # Main Arduino sketch
-├── lib/                  # Custom libraries
-├── platformio.ini        # PlatformIO configuration
-└── README.md            # This file
-```
+- **VCC** → 5V
+- **GND** → GND
+- **SDA** → Pin A4 (I2C Data)
+- **SCL** → Pin A5 (I2C Clock)
 
-## Example Code Features
+#### 7-Segment Display Module #1 (Left Display)
 
-The included `main.cpp` demonstrates:
+- **VCC** → 5V
+- **GND** → GND
+- **DIO** → Pin 11 (Data Input)
+- **RCLK** → Pin 12 (Register Clock/Latch)
+- **SCLK** → Pin 13 (Shift Clock)
 
-- **Digital I/O**: Button input with debouncing, LED output
-- **Serial Communication**: Debug messages via USB serial
-- **Custom Functions**: Reusable code for blinking and sensor reading
-- **Best Practices**: Proper pin definitions, debouncing, non-blocking code
+#### 7-Segment Display Module #2 (Right Display)
 
-## Pin Configuration
+- **VCC** → 5V
+- **GND** → GND
+- **DIO** → Pin A0 (Data Input)
+- **RCLK** → Pin A1 (Register Clock/Latch)
+- **SCLK** → Pin A2 (Shift Clock)
 
-- **Pin 13**: Built-in LED (output)
-- **Pin 2**: Button input (with internal pullup)
-- **A0-A5**: Analog sensor inputs (available)
-- **Pins 3-12**: Additional digital I/O (available)
+#### 3x4 Matrix Keypad (7 pins total)
 
-## Serial Monitor
+- **Row 1** → Pin 4
+- **Row 2** → Pin 5
+- **Row 3** → Pin 6
+- **Row 4** → Pin 7
+- **Col 1** → Pin 8
+- **Col 2** → Pin 9
+- **Col 3** → Pin 10
 
-To view debug messages:
+### Power Requirements
 
-1. Upload your code to the Arduino
-2. Open Serial Monitor in PlatformIO (plug icon)
-3. Set baud rate to 9600
-4. Press the reset button on Arduino to see startup messages
-
-## Common Commands
-
-- **Build**: `pio run`
-- **Upload**: `pio run --target upload`
-- **Serial Monitor**: `pio device monitor`
-- **Clean**: `pio run --target clean`
-
-## Troubleshooting
-
-### Upload Issues
-
-- Check USB connection
-- Verify correct COM port in Device Manager
-- Try different USB cable
-- Press reset button on Arduino just before upload
-
-### Serial Monitor Issues
-
-- Ensure correct baud rate (9600)
-- Check COM port selection
-- Close other serial applications
-
-### Build Issues
-
-- Check PlatformIO installation
-- Verify platformio.ini configuration
-- Restart VS Code if needed
-
-## Adding Libraries
-
-To add external libraries, edit `platformio.ini`:
-
-```ini
-lib_deps =
-    adafruit/Adafruit SSD1306@^2.5.7
-    arduino-libraries/Servo@^1.1.8
-```
-
-## Next Steps
-
-1. Modify `main.cpp` for your specific project needs
-2. Add sensors, actuators, or displays
-3. Create custom functions in separate header files
-4. Explore Arduino libraries for advanced features
-
-## Resources
-
-- [Arduino Reference](https://www.arduino.cc/reference/en/)
-- [PlatformIO Documentation](https://docs.platformio.org/)
-- [Arduino Uno Pinout](https://docs.arduino.cc/hardware/uno-rev3)
-
-Happy coding with your Arduino Uno!
+- **Arduino Uno**: 5V via USB or external power supply
+- **Total Current**: Approximately 200-300mA with all components active
+- **All components**: Share common 5V and GND connections
