@@ -10,24 +10,21 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);  // Try 0x27 first, common address
 
 #include <DIYables_4Digit7Segment_74HC595.h> // DIYables_4Digit7Segment_74HC595 library
 
-// Display Module 1
-#define D1_DIO   5  // The Arduino pin connected to DIO
-#define D1_RCLK  6  // The Arduino pin connected to RCLK
-#define D1_SCLK  7  // The Arduino pin connected to SCLK
-// Display Module 2
-#define D2_DIO   8  // The Arduino pin connected to DIO
-#define D2_RCLK  9  // The Arduino pin connected to RCLK
-#define D2_SCLK  10  // The Arduino pin connected to SCLK
+// Display Module 1 on Digital Pins 8, 9, 10
+#define D1_DIO   8   // The Arduino pin connected to DIO
+#define D1_RCLK  9   // The Arduino pin connected to RCLK
+#define D1_SCLK  10  // The Arduino pin connected to SCLK
+
+// Display Module 2 on Analog Pins A0, A1, A2
+#define D2_DIO   A0  // The Arduino pin connected to DIO  
+#define D2_RCLK  A1  // The Arduino pin connected to RCLK
+#define D2_SCLK  A2  // The Arduino pin connected to SCLK
 
 DIYables_4Digit7Segment_74HC595 display1(D1_SCLK, D1_RCLK, D1_DIO);
 DIYables_4Digit7Segment_74HC595 display2(D2_SCLK, D2_RCLK, D2_DIO);
 
 // Global variables
-unsigned long lastBlinkTime = 0;
-const unsigned long blinkInterval = 5000;  // 5 seconds in milliseconds
-unsigned long lastTimeUpdate = 0;
-const unsigned long timeUpdateInterval = 1000;  // Update time every second
-unsigned long startTime = 0;  // Time when Arduino started (in seconds since boot)
+
 
 void setup() {
   Serial.begin(9600);
@@ -51,31 +48,12 @@ void setup() {
   // Initial LED state
   digitalWrite(LED_PIN, LOW);
   
-  // Initialize time tracking
-  startTime = millis() / 1000;  // Convert to seconds
   
   Serial.println("Setup complete. LCD initialized. Ready to run main loop.");
 }
 
 void loop() {
-  unsigned long currentTime = millis();
   
-  // Check if it's time to blink the LED (every 5 seconds)
-  if (currentTime - lastBlinkTime >= blinkInterval) {
-    // Use the library function to blink once
-    int pattern[] = {1, 0};  // ON, then OFF
-    blinkPattern(LED_PIN, pattern, 2, 250);  // 250ms for each state (0.5s total blink)
-    
-    // Update last blink time
-    lastBlinkTime = currentTime;
-  }
-  
-  // Update time display every second
-  if (currentTime - lastTimeUpdate >= timeUpdateInterval) {
-    updateLCDTimeDisplay(lcd, startTime);
-    lastTimeUpdate = currentTime;
-  }
-
 
   // The above 1 second look is affecting the multiplexing timing - be aware
   display1.loop();
