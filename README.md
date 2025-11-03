@@ -9,6 +9,7 @@ The following libraries are required for this project and are automatically inst
 - **marcoschwartz/LiquidCrystal_I2C@^1.1.4**
   - Used for controlling the 20x4 I2C LCD display
   - Handles initialization, text display, and backlight control
+  - https://arduinogetstarted.com/tutorials/arduino-lcd-20x4
 
 ### 7-Segment Display Library
 
@@ -16,6 +17,7 @@ The following libraries are required for this project and are automatically inst
   - Used for controlling the two 4-digit 7-segment display modules
   - Handles multiplexing and digit patterns for 74HC595 shift registers
   - GitHub: https://github.com/DIYables/DIYables_4Digit7Segment_74HC595
+  - https://arduinogetstarted.com/tutorials/arduino-74hc595-4-digit-7-segment-display
 
 ### Keypad Library
 
@@ -23,6 +25,7 @@ The following libraries are required for this project and are automatically inst
   - Used for interfacing with the 3x4 matrix membrane keypad
   - Handles key detection, debouncing, and event handling
   - GitHub: https://github.com/Chris--A/Keypad
+  - https://arduinogetstarted.com/tutorials/arduino-keypad#content_how_to_program_for_keypad
 
 ### Custom Library
 
