@@ -52,3 +52,31 @@ bool debounceButton(int pin, bool& lastState, unsigned long& lastDebounceTime, u
 void serialPrintFloat(float value, int decimals) {
   Serial.print(value, decimals);
 }
+
+/**
+ * Update LCD time display in bottom right corner
+ * @param lcd - Reference to LCD object
+ * @param startTime - Start time in seconds for elapsed time calculation
+ */
+void updateLCDTimeDisplay(LiquidCrystal_I2C& lcd, unsigned long startTime) {
+  unsigned long totalSeconds = (millis() / 1000) - startTime;
+  
+  // Calculate hours, minutes, seconds from total seconds
+  int hours = (totalSeconds / 3600) % 24;  // Keep within 24-hour format
+  int minutes = (totalSeconds / 60) % 60;
+  int seconds = totalSeconds % 60;
+  
+  // Position cursor in bottom right corner (row 3, starting from column 11)
+  // Format: HH:MM:SS (8 characters, so start at column 20-8=12, but 0-indexed so 11)
+  lcd.setCursor(11, 3);
+  
+  // Print time with leading zeros
+  if (hours < 10) lcd.print("0");
+  lcd.print(hours);
+  lcd.print(":");
+  if (minutes < 10) lcd.print("0");
+  lcd.print(minutes);
+  lcd.print(":");
+  if (seconds < 10) lcd.print("0");
+  lcd.print(seconds);
+}
