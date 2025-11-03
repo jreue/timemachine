@@ -2,6 +2,7 @@
 #include <LiquidCrystal_I2C.h>
 #include "timemachine.h"
 #include <Keypad.h>
+#include <ezBuzzer.h>
 
 // Pin definitions
 const int LED_PIN = 13;        // Built-in LED on Arduino Uno
@@ -40,6 +41,8 @@ byte pin_column[COLUMN_NUM] = {8, 9, 10};
 
 Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM );
 
+#define BUZZER_PIN 3
+ezBuzzer buzzer(BUZZER_PIN);
 
 void setup() {
   Serial.begin(9600);
@@ -68,16 +71,18 @@ void setup() {
 }
 
 void loop() {
+  display1.loop();
+  display2.loop();
+
+  buzzer.loop();
+  
   char key = keypad.getKey();
 
   if (key){
     Serial.println(key);
+    buzzer.beep(100);
   }
   
-
-  // The above 1 second look is affecting the multiplexing timing - be aware
-  display1.loop();
-  display2.loop();
 }
 
 

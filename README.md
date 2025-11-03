@@ -27,6 +27,14 @@ The following libraries are required for this project and are automatically inst
   - GitHub: https://github.com/Chris--A/Keypad
   - https://arduinogetstarted.com/tutorials/arduino-keypad#content_how_to_program_for_keypad
 
+### Buzzer Library
+
+- **arduinogetstarted/ezBuzzer@^1.0.0**
+  - Used for controlling piezo buzzer with simple beep functions
+  - Provides non-blocking buzzer control and multiple tone patterns
+  - GitHub: https://github.com/ArduinoGetStarted/Arduino-Library-ezBuzzer
+  - https://arduinogetstarted.com/tutorials/arduino-piezo-buzzer
+
 ### Custom Library
 
 - **timemachine.h/cpp** (local library)
@@ -69,6 +77,12 @@ The following libraries are required for this project and are automatically inst
 - **Col 1** → Pin 8
 - **Col 2** → Pin 9
 - **Col 3** → Pin 10
+
+#### Piezo Buzzer
+
+- **Positive (+)** → Pin 3 (PWM capable for tones)
+- **Negative (-)** → GND
+- **Note**: Remove "Remove seal after washing" sticker for proper sound output
 
 ### Power Requirements
 
