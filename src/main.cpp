@@ -10,10 +10,10 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);  // Try 0x27 first, common address
 
 #include <DIYables_4Digit7Segment_74HC595.h> // DIYables_4Digit7Segment_74HC595 library
 
-// Display Module 1 on Digital Pins 8, 9, 10
-#define D1_DIO   8   // The Arduino pin connected to DIO
-#define D1_RCLK  9   // The Arduino pin connected to RCLK
-#define D1_SCLK  10  // The Arduino pin connected to SCLK
+// Display Module 1 on Digital Pins 11, 12, 13
+#define D1_DIO   11   // The Arduino pin connected to DIO
+#define D1_RCLK  12   // The Arduino pin connected to RCLK
+#define D1_SCLK  13  // The Arduino pin connected to SCLK
 
 // Display Module 2 on Analog Pins A0, A1, A2
 #define D2_DIO   A0  // The Arduino pin connected to DIO  
