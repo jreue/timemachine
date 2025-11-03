@@ -8,7 +8,19 @@ const int LED_PIN = 13;        // Built-in LED on Arduino Uno
 // LCD setup (address, columns, rows)
 LiquidCrystal_I2C lcd(0x27, 20, 4);  // Try 0x27 first, common address
 
+#include <DIYables_4Digit7Segment_74HC595.h> // DIYables_4Digit7Segment_74HC595 library
 
+// Display Module 1
+#define D1_DIO   5  // The Arduino pin connected to DIO
+#define D1_RCLK  6  // The Arduino pin connected to RCLK
+#define D1_SCLK  7  // The Arduino pin connected to SCLK
+// Display Module 2
+#define D2_DIO   8  // The Arduino pin connected to DIO
+#define D2_RCLK  9  // The Arduino pin connected to RCLK
+#define D2_SCLK  10  // The Arduino pin connected to SCLK
+
+DIYables_4Digit7Segment_74HC595 display1(D1_SCLK, D1_RCLK, D1_DIO);
+DIYables_4Digit7Segment_74HC595 display2(D2_SCLK, D2_RCLK, D2_DIO);
 
 // Global variables
 unsigned long lastBlinkTime = 0;
@@ -30,6 +42,9 @@ void setup() {
   lcd.setCursor(2, 0);  // Column 2, Row 0 (centered)
   lcd.print("The Time Machine");
   
+  display1.printFloat(12.25, 2, false); 
+  display2.printInt(1975, false); 
+
   // Configure pins
   pinMode(LED_PIN, OUTPUT);
   
@@ -60,6 +75,11 @@ void loop() {
     updateLCDTimeDisplay(lcd, startTime);
     lastTimeUpdate = currentTime;
   }
+
+
+  // The above 1 second look is affecting the multiplexing timing - be aware
+  display1.loop();
+  display2.loop();
 }
 
 
