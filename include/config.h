@@ -51,4 +51,9 @@
 // ====================
 #define SERIAL_BAUD_RATE 9600
 
+// ====================
+// Countdown Configuration
+// ====================
+#define COUNTDOWN_MINUTES 10  // Set countdown time in minutes
+
 #endif // CONFIG_H

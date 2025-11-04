@@ -1,49 +1,36 @@
 #include "timemachine.h"
 
 /**
- * Debounce button input
- * @param pin - Button pin number
- * @param lastState - Reference to store last button state
- * @param lastDebounceTime - Reference to store last debounce time
- * @param debounceDelay - Debounce delay in milliseconds
- * @return True if button was pressed (stable state change)
- */
-bool debounceButton(int pin, bool& lastState, unsigned long& lastDebounceTime, unsigned long debounceDelay) {
-  bool currentState = digitalRead(pin);
-  
-  if (currentState != lastState) {
-    lastDebounceTime = millis();
-  }
-  
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    if (currentState != lastState) {
-      lastState = currentState;
-      return (currentState == LOW); // Return true for button press (assuming pullup)
-    }
-  }
-  
-  return false;
-}
-
-
-/**
- * Update LCD time display in bottom right corner
+ * Update LCD countdown timer display in bottom right corner
  * @param lcd - Reference to LCD object
- * @param startTime - Start time in seconds for elapsed time calculation
+ * @param startTime - Start time in milliseconds when countdown began
+ * @param countdownMinutes - Number of minutes for countdown timer
  */
-void updateLCDTimeDisplay(LiquidCrystal_I2C& lcd, unsigned long startTime) {
-  unsigned long totalSeconds = (millis() / 1000) - startTime;
+void updateLCDCountdown(LiquidCrystal_I2C& lcd, unsigned long startTime, int countdownMinutes) {
+  // Calculate total countdown time in seconds
+  unsigned long totalCountdownSeconds = countdownMinutes * 60;
   
-  // Calculate hours, minutes, seconds from total seconds
-  int hours = (totalSeconds / 3600) % 24;  // Keep within 24-hour format
-  int minutes = (totalSeconds / 60) % 60;
-  int seconds = totalSeconds % 60;
+  // Calculate elapsed time since start
+  unsigned long elapsedSeconds = (millis() - startTime) / 1000;
+  
+  // Calculate remaining time (countdown)
+  long remainingSeconds = totalCountdownSeconds - elapsedSeconds;
+  
+  // Handle countdown completion (show 00:00:00 when done)
+  if (remainingSeconds <= 0) {
+    remainingSeconds = 0;
+  }
+  
+  // Calculate hours, minutes, seconds from remaining time
+  int hours = remainingSeconds / 3600;
+  int minutes = (remainingSeconds / 60) % 60;
+  int seconds = remainingSeconds % 60;
   
   // Position cursor in bottom right corner (row 3, starting from column 11)
   // Format: HH:MM:SS (8 characters, so start at column 20-8=12, but 0-indexed so 11)
   lcd.setCursor(11, 3);
   
-  // Print time with leading zeros
+  // Print countdown time with leading zeros
   if (hours < 10) lcd.print("0");
   lcd.print(hours);
   lcd.print(":");
@@ -55,7 +42,7 @@ void updateLCDTimeDisplay(LiquidCrystal_I2C& lcd, unsigned long startTime) {
 }
 
 
-void setDate(DIYables_4Digit7Segment_74HC595& display1, DIYables_4Digit7Segment_74HC595& display2, int month, int day, int year) {
+void set7SegmentDate(DIYables_4Digit7Segment_74HC595& display1, DIYables_4Digit7Segment_74HC595& display2, int month, int day, int year) {
   // Clear display and manually set each digit to avoid floating point precision issues
   display1.clear();
   
@@ -76,71 +63,4 @@ void setDate(DIYables_4Digit7Segment_74HC595& display1, DIYables_4Digit7Segment_
   display2.printInt(year, false);
 }
 
-/**
- * Non-blocking LED blink function - safe to use with 7-segment displays
- * @param pin - LED pin number
- * @param previousMillis - Reference to store last blink time (must be static/global)
- * @param interval - Blink interval in milliseconds (default 500ms)
- * @return True when LED state changes
- */
-bool nonBlockingBlink(int pin, unsigned long& previousMillis, unsigned long interval) {
-  unsigned long currentMillis = millis();
-  
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis;
-    
-    // Toggle LED state
-    digitalWrite(pin, !digitalRead(pin));
-    return true; // LED state changed
-  }
-  
-  return false; // No change
-}
 
-/**
- * Test function to cycle through all months with single and double digit days
- * Call this in loop() to automatically test all date format permutations
- * @param display1 - Reference to first 7-segment display (month/day)
- * @param display2 - Reference to second 7-segment display (year)  
- * @param interval - Time between test cases in milliseconds
- */
-void testAllDates(DIYables_4Digit7Segment_74HC595& display1, DIYables_4Digit7Segment_74HC595& display2, unsigned long interval) {
-  static unsigned long lastUpdate = 0;
-  static int currentMonth = 1;
-  static bool useSingleDigitDay = true;
-  static int testYear = 2025;
-  
-  if (millis() - lastUpdate >= interval) {
-    lastUpdate = millis();
-    
-    int testDay = useSingleDigitDay ? 5 : 25;  // Single digit: 5th, Double digit: 25th
-    
-    // Display current test case
-    setDate(display1, display2, currentMonth, testDay, testYear);
-    
-    // Print to serial for verification
-    Serial.print("Testing: Month=");
-    Serial.print(currentMonth);
-    Serial.print(", Day=");
-    Serial.print(testDay);
-    Serial.print(" -> Display should show: ");
-    if (currentMonth < 10) Serial.print("0");
-    Serial.print(currentMonth);
-    Serial.print(".");
-    if (testDay < 10) Serial.print("0");
-    Serial.print(testDay);
-    Serial.print(" / ");
-    Serial.println(testYear);
-    
-    // Advance to next test case
-    if (useSingleDigitDay) {
-      useSingleDigitDay = false;  // Next: try double digit day for same month
-    } else {
-      useSingleDigitDay = true;   // Next: single digit day for next month
-      currentMonth++;
-      if (currentMonth > 12) {
-        currentMonth = 1;  // Restart from January
-      }
-    }
-  }
-}

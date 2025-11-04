@@ -10,8 +10,8 @@ LiquidCrystal_I2C lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
 DIYables_4Digit7Segment_74HC595 display1(D1_SCLK_PIN, D1_RCLK_PIN, D1_DIO_PIN);
 DIYables_4Digit7Segment_74HC595 display2(D2_SCLK_PIN, D2_RCLK_PIN, D2_DIO_PIN);
 
-const byte rowPins[KEYPAD_ROW_COUNT] = {KEYPAD_R1_PIN, KEYPAD_R2_PIN, KEYPAD_R3_PIN, KEYPAD_R4_PIN}; 
-const byte colPins[KEYPAD_COL_COUNT] = {KEYPAD_C1_PIN, KEYPAD_C2_PIN, KEYPAD_C3_PIN};
+byte rowPins[KEYPAD_ROW_COUNT] = {KEYPAD_R1_PIN, KEYPAD_R2_PIN, KEYPAD_R3_PIN, KEYPAD_R4_PIN}; 
+byte colPins[KEYPAD_COL_COUNT] = {KEYPAD_C1_PIN, KEYPAD_C2_PIN, KEYPAD_C3_PIN};
 
 char keyValues[KEYPAD_ROW_COUNT][KEYPAD_COL_COUNT] = {
   {'1','2','3'},
@@ -22,6 +22,9 @@ char keyValues[KEYPAD_ROW_COUNT][KEYPAD_COL_COUNT] = {
 
 Keypad keypad = Keypad( makeKeymap(keyValues), rowPins, colPins, KEYPAD_ROW_COUNT, KEYPAD_COL_COUNT );
 ezBuzzer buzzer(BUZZER_PIN);
+
+// Countdown timer start time
+unsigned long countdownStartTime = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -36,7 +39,10 @@ void setup() {
   lcd.print("The Time Machine");
 
   // Set initial date
-  setDate(display1, display2, 12, 25, 1975);
+  set7SegmentDate(display1, display2, 12, 25, 1975);
+
+  // Initialize countdown timer start time
+  countdownStartTime = millis();
 
   Serial.println("Setup complete. Ready to run main loop.");
 }
@@ -45,6 +51,9 @@ void loop() {
   display1.loop();
   display2.loop();
   buzzer.loop();
+  
+  // Update countdown timer display
+  updateLCDCountdown(lcd, countdownStartTime, COUNTDOWN_MINUTES);
   
   char key = keypad.getKey();
   if (key){

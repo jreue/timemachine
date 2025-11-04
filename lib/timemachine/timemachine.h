@@ -12,11 +12,8 @@
  */
 
 // Function declarations
-bool debounceButton(int pin, bool& lastState, unsigned long& lastDebounceTime, unsigned long debounceDelay = 50);
 
-void updateLCDTimeDisplay(LiquidCrystal_I2C& lcd, unsigned long startTime);
-void setDate(DIYables_4Digit7Segment_74HC595& display1, DIYables_4Digit7Segment_74HC595& display2, int month, int day, int year);
-bool nonBlockingBlink(int pin, unsigned long& previousMillis, unsigned long interval = 500);
-void testAllDates(DIYables_4Digit7Segment_74HC595& display1, DIYables_4Digit7Segment_74HC595& display2, unsigned long interval = 2000);
+void updateLCDCountdown(LiquidCrystal_I2C& lcd, unsigned long startTime, int countdownMinutes);
+void set7SegmentDate(DIYables_4Digit7Segment_74HC595& display1, DIYables_4Digit7Segment_74HC595& display2, int month, int day, int year);
 
 #endif // TIMEMACHINE_H
