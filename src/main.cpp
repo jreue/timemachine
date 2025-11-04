@@ -1,88 +1,84 @@
 #include <Arduino.h>
+#include <DIYables_4Digit7Segment_74HC595.h> 
 #include <LiquidCrystal_I2C.h>
-#include "timemachine.h"
 #include <Keypad.h>
 #include <ezBuzzer.h>
+#include "timemachine.h"
 
-// Pin definitions
-const int LED_PIN = 13;        // Built-in LED on Arduino Uno
+// LCD setup - I2C Pins
+#define LCD_ADDRESS 0x27
+#define LCD_COLUMNS 20
+#define LCD_ROWS 4
 
-// LCD setup (address, columns, rows)
-LiquidCrystal_I2C lcd(0x27, 20, 4);  // Try 0x27 first, common address
+LiquidCrystal_I2C lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
 
-#include <DIYables_4Digit7Segment_74HC595.h> // DIYables_4Digit7Segment_74HC595 library
+// 7-Segment Display 1 - Digital Pins
+#define D1_DIO_PIN   11
+#define D1_RCLK_PIN  12
+#define D1_SCLK_PIN  13
 
-// Display Module 1 on Digital Pins 11, 12, 13
-#define D1_DIO   11   // The Arduino pin connected to DIO
-#define D1_RCLK  12   // The Arduino pin connected to RCLK
-#define D1_SCLK  13  // The Arduino pin connected to SCLK
+// 7-Segment Display 2 - Analog Pins
+#define D2_DIO_PIN   A0
+#define D2_RCLK_PIN  A1
+#define D2_SCLK_PIN  A2
 
-// Display Module 2 on Analog Pins A0, A1, A2
-#define D2_DIO   A0  // The Arduino pin connected to DIO  
-#define D2_RCLK  A1  // The Arduino pin connected to RCLK
-#define D2_SCLK  A2  // The Arduino pin connected to SCLK
-
-DIYables_4Digit7Segment_74HC595 display1(D1_SCLK, D1_RCLK, D1_DIO);
-DIYables_4Digit7Segment_74HC595 display2(D2_SCLK, D2_RCLK, D2_DIO);
+DIYables_4Digit7Segment_74HC595 display1(D1_SCLK_PIN, D1_RCLK_PIN, D1_DIO_PIN);
+DIYables_4Digit7Segment_74HC595 display2(D2_SCLK_PIN, D2_RCLK_PIN, D2_DIO_PIN);
 
 /// Keypad setup
-const int ROW_NUM = 4; //four rows
-const int COLUMN_NUM = 3; //three columns
+#define KEYPAD_R1_PIN 4
+#define KEYPAD_R2_PIN 5
+#define KEYPAD_R3_PIN 6
+#define KEYPAD_R4_PIN 7
+#define KEYPAD_C1_PIN 8
+#define KEYPAD_C2_PIN 9
+#define KEYPAD_C3_PIN 10
 
-char keys[ROW_NUM][COLUMN_NUM] = {
+#define KEYPAD_ROW_COUNT 4
+#define KEYPAD_COL_COUNT 3
+
+ byte rowPins[KEYPAD_ROW_COUNT] = {KEYPAD_R1_PIN, KEYPAD_R2_PIN, KEYPAD_R3_PIN, KEYPAD_R4_PIN}; 
+ byte colPins[KEYPAD_COL_COUNT] = {KEYPAD_C1_PIN, KEYPAD_C2_PIN, KEYPAD_C3_PIN};
+
+char keyValues[KEYPAD_ROW_COUNT][KEYPAD_COL_COUNT] = {
   {'1','2','3'},
   {'4','5','6'},
   {'7','8','9'},
   {'*','0','#'}
 };
 
-byte pin_rows[ROW_NUM] = {4, 5, 6, 7}; 
-byte pin_column[COLUMN_NUM] = {8, 9, 10};
+Keypad keypad = Keypad( makeKeymap(keyValues), rowPins, colPins, KEYPAD_ROW_COUNT, KEYPAD_COL_COUNT );
 
-Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM );
-
+// Piezo Buzzer Setup
 #define BUZZER_PIN 3
 ezBuzzer buzzer(BUZZER_PIN);
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Arduino Uno Timemachine Project Started!");
+  Serial.println("Timemachine Project Started!");
   
   // Initialize LCD
   lcd.init();
   lcd.backlight();
-  
-  // Center "The Time Machine" on 20-character display
-  // Text is 16 characters, so (20-16)/2 = 2 spaces from left
-  lcd.setCursor(2, 0);  // Column 2, Row 0 (centered)
-  lcd.print("The Time Machine");
-  
-  display1.printFloat(12.25, 2, false); 
-  display2.printInt(1975, false); 
 
-  // Configure pins
-  pinMode(LED_PIN, OUTPUT);
-  
-  // Initial LED state
-  digitalWrite(LED_PIN, LOW);
-  
-  
-  Serial.println("Setup complete. LCD initialized. Ready to run main loop.");
+  // Display welcome message
+  lcd.setCursor(2, 0);  
+  lcd.print("The Time Machine");
+
+  // Set initial date
+  setDate(display1, display2, 12, 25, 1975);
+
+  Serial.println("Setup complete. Ready to run main loop.");
 }
 
 void loop() {
   display1.loop();
   display2.loop();
-
   buzzer.loop();
   
   char key = keypad.getKey();
-
   if (key){
     Serial.println(key);
     buzzer.beep(100);
   }
-  
 }
-
-
