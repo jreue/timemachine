@@ -1,13 +1,10 @@
-#ifndef GAME_ENGINE_H
-#define GAME_ENGINE_H
+#pragma once
 
-#include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include <ezBuzzer.h>
 
 // Total game time in minutes
 #define COUNTDOWN_MINUTES 12
-
 
 // Structure to hold elapsed game hours, minutes, seconds
 struct GameTime {
@@ -27,11 +24,8 @@ struct GameState {
 
 extern GameState gameState;
 
-
 void initializeGame();
 void startGame();
 void processKeyInput(char key, LiquidCrystal_I2C &lcd, ezBuzzer &buzzer);
 void updateGameState(LiquidCrystal_I2C &lcd);
 GameTime getRemainingGameTime();
-
-#endif // GAME_ENGINE_H

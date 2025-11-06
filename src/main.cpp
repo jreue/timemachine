@@ -25,9 +25,6 @@ char keyValues[KEYPAD_ROW_COUNT][KEYPAD_COL_COUNT] = {
 Keypad keypad = Keypad( makeKeymap(keyValues), rowPins, colPins, KEYPAD_ROW_COUNT, KEYPAD_COL_COUNT );
 ezBuzzer buzzer(BUZZER_PIN);
 
-// Countdown timer start time
-unsigned long countdownStartTime = 0;
-
 void setup() {
   Serial.begin(9600);
   Serial.println("Timemachine Project Started!");
@@ -45,14 +42,10 @@ void setup() {
   lcd.setCursor(0, 2);
   lcd.print("Status: Offline");
 
-
   // Set initial date
   set7SegmentDate(display1, display2, 12, 25, 1975);
 
-  // Initialize countdown timer start time
-  //countdownStartTime = millis();
-
-  //Serial.println("Setup complete. Ready to run main loop.");
+  initializeGame();
 }
 
 void loop() {
@@ -61,8 +54,7 @@ void loop() {
   buzzer.loop();
   
   char key = keypad.getKey();
-  if (key){
-    
+  if (key) {
     processKeyInput(key, lcd, buzzer);
   }
 
