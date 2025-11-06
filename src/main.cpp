@@ -3,8 +3,10 @@
 #include <LiquidCrystal_I2C.h>
 #include <Keypad.h>
 #include <ezBuzzer.h>
-#include "timemachine.h"
-#include "config.h"
+
+#include "hardware_config.h"
+#include "GameEngine.h"
+#include "DateController.h"
 
 LiquidCrystal_I2C lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
 DIYables_4Digit7Segment_74HC595 display1(D1_SCLK_PIN, D1_RCLK_PIN, D1_DIO_PIN);
@@ -30,21 +32,27 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Timemachine Project Started!");
   
-  // Initialize LCD
+  // Init Hardware
   lcd.init();
   lcd.backlight();
-
+  display1.clear();
+  display2.clear();
+  
   // Display welcome message
-  lcd.setCursor(2, 0);  
-  lcd.print("The Time Machine");
+  lcd.setCursor(0, 0);  
+  lcd.print("Time Machine v1.24");
+  
+  lcd.setCursor(0, 2);
+  lcd.print("Status: Offline");
+
 
   // Set initial date
   set7SegmentDate(display1, display2, 12, 25, 1975);
 
   // Initialize countdown timer start time
-  countdownStartTime = millis();
+  //countdownStartTime = millis();
 
-  Serial.println("Setup complete. Ready to run main loop.");
+  //Serial.println("Setup complete. Ready to run main loop.");
 }
 
 void loop() {
@@ -52,12 +60,11 @@ void loop() {
   display2.loop();
   buzzer.loop();
   
-  // Update countdown timer display
-  updateLCDCountdown(lcd, countdownStartTime, COUNTDOWN_MINUTES);
-  
   char key = keypad.getKey();
   if (key){
-    Serial.println(key);
-    buzzer.beep(100);
+    
+    processKeyInput(key, lcd, buzzer);
   }
+
+  updateGameState(lcd);
 }

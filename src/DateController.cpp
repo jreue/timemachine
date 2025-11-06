@@ -1,5 +1,4 @@
-#include "testing.h"
-#include "timemachine.h"
+#include "DateController.h"
 
 /**
  * Test function to cycle through all months with single and double digit days
@@ -47,4 +46,25 @@ void testAllDates(DIYables_4Digit7Segment_74HC595& display1, DIYables_4Digit7Seg
       }
     }
   }
+}
+
+void set7SegmentDate(DIYables_4Digit7Segment_74HC595& display1, DIYables_4Digit7Segment_74HC595& display2, int month, int day, int year) {
+  // Clear display and manually set each digit to avoid floating point precision issues
+  display1.clear();
+  
+  // Set month digits (positions 1 and 2)
+  display1.setNumber(1, month / 10);   // Tens digit of month
+  display1.setNumber(2, month % 10);   // Ones digit of month
+  
+  // Set decimal point between month and day
+  display1.setDot(2);
+  
+  // Set day digits (positions 3 and 4) 
+  display1.setNumber(3, day / 10);     // Tens digit of day
+  display1.setNumber(4, day % 10);     // Ones digit of day
+  
+  display1.show();
+  
+  // Display year on display2 (YYYY)
+  display2.printInt(year, false);
 }
