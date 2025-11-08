@@ -4,6 +4,8 @@
 #include <ezBuzzer.h>
 
 class LcdController;
+class DateController;
+class BuzzerController;
 
 #define COUNTDOWN_MINUTES 12
 
@@ -15,10 +17,11 @@ struct GameTime {
 
 class GameEngine {
 public:
-    GameEngine();
+    GameEngine(DateController &dateController, LcdController &lcdController, BuzzerController &buzzerController);
+    void initialize();
     void startGame();
     void processKeyInput(char key);
-    void updateGameState(LcdController &lcdController);
+    void updateGameState();
     GameTime getRemainingGameTime();
     bool isGameActive();
 
@@ -30,6 +33,10 @@ private:
 
     GameState gameState;
     unsigned long lastUpdate;
+    
+    DateController &dateController;
+    LcdController &lcdController;
+    BuzzerController &buzzerController;
 
     unsigned long getRemainingTime();
 };

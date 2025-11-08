@@ -8,10 +8,11 @@
 #include "BuzzerController.h"
 
 LcdController lcdController;
-GameEngine gameEngine;
 KeypadController keypadController;
 DateController dateController;
 BuzzerController buzzerController;
+
+GameEngine gameEngine(dateController, lcdController, buzzerController);
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);
@@ -19,9 +20,9 @@ void setup() {
   lcdController.begin();
   keypadController.begin();
   buzzerController.begin();
-  
   dateController.begin();
-  dateController.showDate(12, 25, 1975);
+  
+  gameEngine.initialize();
 }
 
 void loop() {
@@ -33,5 +34,5 @@ void loop() {
     gameEngine.processKeyInput(key);
   }
 
-  gameEngine.updateGameState(lcdController);
+  gameEngine.updateGameState();
 }

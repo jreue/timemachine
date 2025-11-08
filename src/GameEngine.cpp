@@ -1,9 +1,19 @@
 #include "GameEngine.h"
 #include "LcdController.h"
+#include "DateController.h"
+#include "BuzzerController.h"
 
-GameEngine::GameEngine() : lastUpdate(0) {
+GameEngine::GameEngine(DateController &dateController, LcdController &lcdController, BuzzerController &buzzerController) 
+    : lastUpdate(0), 
+      dateController(dateController),
+      lcdController(lcdController),
+      buzzerController(buzzerController) {
     gameState.gameActive = false;
     gameState.gameStartTime = 0;
+}
+
+void GameEngine::initialize() {
+    dateController.showDate(12, 25, 1975);
 }
 
 void GameEngine::startGame() {
@@ -24,7 +34,7 @@ void GameEngine::processKeyInput(char key) {
     } 
 }
 
-void GameEngine::updateGameState(LcdController &lcdController) {
+void GameEngine::updateGameState() {
     unsigned long now = millis();
  
     if (gameState.gameActive && (now - lastUpdate >= 1000)) {
