@@ -10,6 +10,7 @@
 #include "LcdController.h"
 
 LcdController lcdController(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
+GameEngine gameEngine;
 
 DateController dateController(D1_SCLK_PIN, D1_RCLK_PIN, D1_DIO_PIN,
                               D2_SCLK_PIN, D2_RCLK_PIN, D2_DIO_PIN);
@@ -28,15 +29,12 @@ Keypad keypad = Keypad( makeKeymap(keyValues), rowPins, colPins, KEYPAD_ROW_COUN
 ezBuzzer buzzer(BUZZER_PIN);
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println("Timemachine Project Started!");
+  Serial.begin(SERIAL_BAUD_RATE);
   
   lcdController.begin();
   
   dateController.begin();
   dateController.showDate(12, 25, 1975);
-
-  initializeGame();
 }
 
 void loop() {
@@ -45,8 +43,8 @@ void loop() {
   
   char key = keypad.getKey();
   if (key) {
-    processKeyInput(key);
+    gameEngine.processKeyInput(key);
   }
 
-  updateGameState(lcdController);
+  gameEngine.updateGameState(lcdController);
 }
