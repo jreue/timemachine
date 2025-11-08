@@ -9,8 +9,9 @@
 #include "DateController.h"
 
 LiquidCrystal_I2C lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
-DIYables_4Digit7Segment_74HC595 display1(D1_SCLK_PIN, D1_RCLK_PIN, D1_DIO_PIN);
-DIYables_4Digit7Segment_74HC595 display2(D2_SCLK_PIN, D2_RCLK_PIN, D2_DIO_PIN);
+
+DateController dateController(D1_SCLK_PIN, D1_RCLK_PIN, D1_DIO_PIN,
+                              D2_SCLK_PIN, D2_RCLK_PIN, D2_DIO_PIN);
 
 byte rowPins[KEYPAD_ROW_COUNT] = {KEYPAD_R1_PIN, KEYPAD_R2_PIN, KEYPAD_R3_PIN, KEYPAD_R4_PIN}; 
 byte colPins[KEYPAD_COL_COUNT] = {KEYPAD_C1_PIN, KEYPAD_C2_PIN, KEYPAD_C3_PIN};
@@ -32,8 +33,6 @@ void setup() {
   // Init Hardware
   lcd.init();
   lcd.backlight();
-  display1.clear();
-  display2.clear();
   
   // Display welcome message
   lcd.setCursor(0, 0);  
@@ -42,15 +41,14 @@ void setup() {
   lcd.setCursor(0, 2);
   lcd.print("Status: Offline");
 
-  // Set initial date
-  set7SegmentDate(display1, display2, 12, 25, 1975);
+  dateController.begin();
+  dateController.showDate(12, 25, 1975);
 
   initializeGame();
 }
 
 void loop() {
-  display1.loop();
-  display2.loop();
+  dateController.loop();
   buzzer.loop();
   
   char key = keypad.getKey();
