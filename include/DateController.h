@@ -1,11 +1,11 @@
 #pragma once
 #include <Arduino.h>
 #include <DIYables_4Digit7Segment_74HC595.h>
+#include "hardware_config.h"
 
 class DateController {
 public:
-    DateController(uint8_t sclk1, uint8_t rclk1, uint8_t dio1,
-                   uint8_t sclk2, uint8_t rclk2, uint8_t dio2);
+    DateController();
 
     void begin();
     void loop();

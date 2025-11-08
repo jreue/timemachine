@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <DIYables_4Digit7Segment_74HC595.h> 
 #include <LiquidCrystal_I2C.h>
 #include <ezBuzzer.h>
 
@@ -12,9 +11,7 @@
 LcdController lcdController(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
 GameEngine gameEngine;
 KeypadController keypadController;
-
-DateController dateController(D1_SCLK_PIN, D1_RCLK_PIN, D1_DIO_PIN,
-                              D2_SCLK_PIN, D2_RCLK_PIN, D2_DIO_PIN);
+DateController dateController;
 
 ezBuzzer buzzer(BUZZER_PIN);
 

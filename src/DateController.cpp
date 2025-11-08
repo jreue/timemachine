@@ -1,9 +1,8 @@
 #include "DateController.h"
 
-DateController::DateController(uint8_t sclk1, uint8_t rclk1, uint8_t dio1,
-                               uint8_t sclk2, uint8_t rclk2, uint8_t dio2)
-  : display1(sclk1, rclk1, dio1),
-    display2(sclk2, rclk2, dio2) {}
+DateController::DateController()
+  : display1(D1_SCLK_PIN, D1_RCLK_PIN, D1_DIO_PIN),
+    display2(D2_SCLK_PIN, D2_RCLK_PIN, D2_DIO_PIN) {}
 
 void DateController::begin() {
     display1.clear();
