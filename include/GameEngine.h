@@ -3,6 +3,9 @@
 #include <LiquidCrystal_I2C.h>
 #include <ezBuzzer.h>
 
+// Forward declaration
+class LcdController;
+
 // Total game time in minutes
 #define COUNTDOWN_MINUTES 12
 
@@ -26,6 +29,6 @@ extern GameState gameState;
 
 void initializeGame();
 void startGame();
-void processKeyInput(char key, LiquidCrystal_I2C &lcd, ezBuzzer &buzzer);
-void updateGameState(LiquidCrystal_I2C &lcd);
+void processKeyInput(char key);
+void updateGameState(LcdController &lcdController);
 GameTime getRemainingGameTime();

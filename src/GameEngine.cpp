@@ -16,44 +16,28 @@ void startGame() {
     gameState.gameStartTime = millis();
 }
 
-void printStatus(LiquidCrystal_I2C &lcd, const char* status) {
-    lcd.setCursor(0, 2);
-    lcd.print("                    "); // Clear previous status
-    lcd.setCursor(0, 2);
-    lcd.print("Status: ");
-    lcd.print(status);
-}
 
-void processKeyInput(char key, LiquidCrystal_I2C &lcd , ezBuzzer &buzzer) {
+
+void processKeyInput(char key) {
     Serial.println(key);
 
     if (!gameState.gameActive) {
         if (key == '*') {
             startGame();
-           
-            printStatus(lcd, "Online");
-        } else {
-            buzzer.beep(50); 
-        }
-        return;
+        } 
     } 
-
-    // Process other key inputs during the game
-    lcd.setCursor(0, 1);
-    lcd.print("Key Pressed: ");
-    lcd.print(key);
 }
 
 
 
-void updateGameState(LiquidCrystal_I2C &lcd) {
+void updateGameState(LcdController &lcdController) {
     static unsigned long lastUpdate = 0;
     unsigned long now = millis();
  
     if (gameState.gameActive && (now - lastUpdate >= 1000)) {
         GameTime remainingTime = getRemainingGameTime();
 
-        printGameTime(remainingTime, 12, 3, lcd);
+        lcdController.printGameTime(remainingTime, 12, 3);
 
         lastUpdate = now;
     }

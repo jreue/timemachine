@@ -7,8 +7,9 @@
 #include "hardware_config.h"
 #include "GameEngine.h"
 #include "DateController.h"
+#include "LcdController.h"
 
-LiquidCrystal_I2C lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
+LcdController lcdController(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
 
 DateController dateController(D1_SCLK_PIN, D1_RCLK_PIN, D1_DIO_PIN,
                               D2_SCLK_PIN, D2_RCLK_PIN, D2_DIO_PIN);
@@ -30,17 +31,8 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Timemachine Project Started!");
   
-  // Init Hardware
-  lcd.init();
-  lcd.backlight();
+  lcdController.begin();
   
-  // Display welcome message
-  lcd.setCursor(0, 0);  
-  lcd.print("Time Machine v1.24");
-  
-  lcd.setCursor(0, 2);
-  lcd.print("Status: Offline");
-
   dateController.begin();
   dateController.showDate(12, 25, 1975);
 
@@ -53,8 +45,8 @@ void loop() {
   
   char key = keypad.getKey();
   if (key) {
-    processKeyInput(key, lcd, buzzer);
+    processKeyInput(key);
   }
 
-  updateGameState(lcd);
+  updateGameState(lcdController);
 }
