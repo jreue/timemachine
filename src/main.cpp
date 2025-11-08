@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <LiquidCrystal_I2C.h>
 #include <ezBuzzer.h>
 
 #include "hardware_config.h"
@@ -8,7 +7,7 @@
 #include "LcdController.h"
 #include "KeypadController.h"
 
-LcdController lcdController(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
+LcdController lcdController;
 GameEngine gameEngine;
 KeypadController keypadController;
 DateController dateController;

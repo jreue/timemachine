@@ -3,10 +3,11 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include "GameEngine.h"
+#include "hardware_config.h"
 
 class LcdController {
 public:
-    LcdController(uint8_t lcd_Addr, uint8_t columns, uint8_t rows);
+    LcdController();
 
     void begin();
     void loop();
