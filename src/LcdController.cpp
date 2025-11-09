@@ -34,3 +34,7 @@ void LcdController::printGameTime(struct GameTime remainingTime, uint8_t col, ui
     lcd.print("0");
   lcd.print(remainingTime.seconds);
 }
+
+void LcdController::clearScreen() {
+  lcd.clear();
+}

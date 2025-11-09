@@ -21,7 +21,9 @@ GameEngine::GameEngine(DateController& dateController, LcdController& lcdControl
 
 // Called when the game is turned on, but not yet started
 void GameEngine::initialize() {
-  lcdController.printLine("Time Machine v1.24", 0, 0);
+  lcdController.printLine("Time Machine v1.24", 1, 1);
+  lcdController.printLine("Press * to start", 1, 3);
+
   dateController.showDate(12, 25, 1975);
 }
 
@@ -47,6 +49,8 @@ void GameEngine::loop() {
 void GameEngine::startGame() {
   gameState.gameActive = true;
   gameState.gameStartTime = millis();
+
+  lcdController.clearScreen();
 }
 
 void GameEngine::processKeyInput(char key) {
@@ -63,8 +67,11 @@ void GameEngine::updateGameState() {
 
   if (gameState.gameActive && (now - lastUpdate >= 1000)) {
     GameTime remainingTime = getRemainingGameTime();
-
     lcdController.printGameTime(remainingTime, 12, 3);
+
+    int percentageTime = getRemainingTimePercentage();
+    String percentText = String(percentageTime) + "%   ";
+    lcdController.printLine(percentText, 0, 3);
 
     lastUpdate = now;
 
@@ -104,4 +111,15 @@ GameTime GameEngine::getRemainingGameTime() {
   time.seconds = remainingSeconds % 60;
 
   return time;
+}
+
+int GameEngine::getRemainingTimePercentage() {
+  if (!gameState.gameActive) {
+    return 0;
+  }
+
+  unsigned long totalSeconds = (unsigned long)COUNTDOWN_MINUTES * 60;
+  unsigned long remainingSeconds = getRemainingTime();
+
+  return (int)((remainingSeconds * 100) / totalSeconds);
 }

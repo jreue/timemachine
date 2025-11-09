@@ -41,4 +41,5 @@ class GameEngine {
     GameTime getRemainingGameTime();
     bool isGameActive();
     unsigned long getRemainingTime();
+    int getRemainingTimePercentage();
 };
