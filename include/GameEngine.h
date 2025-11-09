@@ -42,6 +42,7 @@ class GameEngine {
     void processKeyInput(char key);
     void updateGameState();
     void displayCurrentCode();
+    void displayCurrentClues();
     void clearCurrentCode();
     GameTime getRemainingGameTime();
     bool isGameActive();
