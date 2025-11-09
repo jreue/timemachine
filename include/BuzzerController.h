@@ -2,20 +2,21 @@
 
 #include <Arduino.h>
 #include <ezBuzzer.h>
+
 #include "hardware_config.h"
 
 class BuzzerController {
-public:
+  public:
     BuzzerController();
     void begin();
     void loop();
-    
+
     void playSuccess();
     void playFailure();
     void playWarning();
     void playVictory();
     void beep(int duration = 100);
 
-private:
+  private:
     ezBuzzer buzzer;
 };

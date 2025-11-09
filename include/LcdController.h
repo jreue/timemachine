@@ -1,18 +1,19 @@
 #pragma once
 
-#include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
+
 #include "GameEngine.h"
 #include "hardware_config.h"
 
 class LcdController {
-public:
+  public:
     LcdController();
 
     void begin();
     void loop();
+    void printLine(const String& text, uint8_t col, uint8_t row);
     void printGameTime(struct GameTime remainingTime, uint8_t col, uint8_t row);
 
-private:
+  private:
     LiquidCrystal_I2C lcd;
 };

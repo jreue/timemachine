@@ -1,35 +1,36 @@
 #include "LcdController.h"
 
-LcdController::LcdController()
-    : lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS) {}
+// ============================================================================
+// Public Methods
+// ============================================================================
+LcdController::LcdController() : lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS) {
+}
 
 void LcdController::begin() {
-    lcd.init();
-    lcd.backlight();
-
-
-    /// meh
-    lcd.setCursor(0, 0);  
-    lcd.print("Time Machine v1.24");
-    
-    lcd.setCursor(0, 2);
-    lcd.print("Status: Offline");
+  lcd.init();
+  lcd.backlight();
 }
 
 void LcdController::loop() {
-    // Add any necessary loop code here
+}
+
+void LcdController::printLine(const String& text, uint8_t col, uint8_t row) {
+  lcd.setCursor(col, row);
+  lcd.print(text);
 }
 
 void LcdController::printGameTime(struct GameTime remainingTime, uint8_t col, uint8_t row) {
-    Serial.println(remainingTime.seconds);
-    lcd.setCursor(col, row);
+  lcd.setCursor(col, row);
 
-    if (remainingTime.hours < 10) lcd.print("0");
-    lcd.print(remainingTime.hours);
-    lcd.print(":");
-    if (remainingTime.minutes < 10) lcd.print("0");
-    lcd.print(remainingTime.minutes);
-    lcd.print(":");
-    if (remainingTime.seconds < 10) lcd.print("0");
-    lcd.print(remainingTime.seconds);
+  if (remainingTime.hours < 10)
+    lcd.print("0");
+  lcd.print(remainingTime.hours);
+  lcd.print(":");
+  if (remainingTime.minutes < 10)
+    lcd.print("0");
+  lcd.print(remainingTime.minutes);
+  lcd.print(":");
+  if (remainingTime.seconds < 10)
+    lcd.print("0");
+  lcd.print(remainingTime.seconds);
 }

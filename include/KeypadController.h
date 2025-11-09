@@ -2,15 +2,16 @@
 
 #include <Arduino.h>
 #include <Keypad.h>
+
 #include "hardware_config.h"
 
 class KeypadController {
-public:
+  public:
     KeypadController();
     void begin();
     char getKey();
 
-private:
+  private:
     Keypad keypad;
     static byte rowPins[KEYPAD_ROW_COUNT];
     static byte colPins[KEYPAD_COL_COUNT];

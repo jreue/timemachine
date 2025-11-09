@@ -12,7 +12,7 @@ KeypadController keypadController;
 DateController dateController;
 BuzzerController buzzerController;
 
-GameEngine gameEngine(dateController, lcdController, buzzerController);
+GameEngine gameEngine(dateController, lcdController, keypadController, buzzerController);
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);
@@ -26,13 +26,5 @@ void setup() {
 }
 
 void loop() {
-  dateController.loop();
-  buzzerController.loop();
-  
-  char key = keypadController.getKey();
-  if (key) {
-    gameEngine.processKeyInput(key);
-  }
-
-  gameEngine.updateGameState();
+  gameEngine.loop();
 }
