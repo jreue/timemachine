@@ -22,11 +22,9 @@ void GameEngine::startGame() {
 }
 
 void GameEngine::processKeyInput(char key) {
-#ifdef DEBUG
     Serial.print("Key pressed: ");
     Serial.println(key);
-#endif
-
+    Serial.println("Cool");
     if (!gameState.gameActive) {
         if (key == '*') {
             startGame();
