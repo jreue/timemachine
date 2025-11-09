@@ -38,3 +38,9 @@ void LcdController::printGameTime(struct GameTime remainingTime, uint8_t col, ui
 void LcdController::clearScreen() {
   lcd.clear();
 }
+
+void LcdController::clearRow(uint8_t row) {
+  lcd.setCursor(0, row);
+  lcd.print("                    ");
+  lcd.setCursor(0, row);
+}
