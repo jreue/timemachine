@@ -17,6 +17,7 @@ GameEngine::GameEngine(DateController& dateController, LcdController& lcdControl
   lastUpdate = 0;
   gameState.gameActive = false;
   gameState.gameStartTime = 0;
+  currentCode = "";
 }
 
 // Called when the game is turned on, but not yet started
@@ -49,16 +50,44 @@ void GameEngine::loop() {
 void GameEngine::startGame() {
   gameState.gameActive = true;
   gameState.gameStartTime = millis();
+  currentCode = "";
 
   lcdController.clearScreen();
+  displayCurrentCode();
 }
 
 void GameEngine::processKeyInput(char key) {
   Serial.println(String("Key pressed: ") + key);
+
   if (!gameState.gameActive) {
     if (key == '*') {
       startGame();
     }
+  } else {
+    // Game is active - handle code entry
+    if (key == '*') {
+      handleClearCode();
+    } else if (key == '#') {
+      handleCodeSubmission();
+    } else if (key >= '0' && key <= '9') {
+      handleCodeEntry(key);
+    }
+  }
+}
+
+void GameEngine::handleClearCode() {
+    clearCurrentCode();
+}
+
+void GameEngine::handleCodeSubmission() {
+  Serial.println(String("Code submitted: ") + currentCode);
+}
+
+void GameEngine::handleCodeEntry(char key) {
+  // Only accept digits and max 4 characters
+  if (currentCode.length() < 4) {
+    currentCode += key;
+    displayCurrentCode();
   }
 }
 
@@ -79,6 +108,17 @@ void GameEngine::updateGameState() {
       gameState.gameActive = false;
     }
   }
+}
+
+void GameEngine::displayCurrentCode() {
+  // Display in columns 5-10 (centered between 4-11)
+  // Format: " XXXX " with spaces around it
+  lcdController.printLine(" " + currentCode + "    ", 5, 3);
+}
+
+void GameEngine::clearCurrentCode() {
+  currentCode = "";
+  displayCurrentCode();
 }
 
 bool GameEngine::isGameActive() {

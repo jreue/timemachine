@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Arduino.h>
+
 class LcdController;
 class DateController;
 class KeypadController;
@@ -32,14 +34,21 @@ class GameEngine {
     BuzzerController& buzzerController;
 
     GameState gameState;
+    String currentCode;
 
     unsigned long lastUpdate;
 
     void startGame();
     void processKeyInput(char key);
     void updateGameState();
+    void displayCurrentCode();
+    void clearCurrentCode();
     GameTime getRemainingGameTime();
     bool isGameActive();
     unsigned long getRemainingTime();
     int getRemainingTimePercentage();
+
+    void handleClearCode();
+    void handleCodeSubmission();
+    void handleCodeEntry(char key);
 };
