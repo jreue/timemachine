@@ -44,3 +44,9 @@ void LcdController::clearRow(uint8_t row) {
   lcd.print("                    ");
   lcd.setCursor(0, row);
 }
+
+void LcdController::clearRows(uint8_t fromRow, uint8_t toRow) {
+  for (uint8_t row = fromRow; row <= toRow; row++) {
+    clearRow(row);
+  }
+}
