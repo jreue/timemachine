@@ -82,6 +82,14 @@ void GameEngine::handleClearCode() {
 
 void GameEngine::handleCodeSubmission() {
   Serial.println(String("Code submitted: ") + currentCode);
+
+  if (isCodeValid()) {
+    Serial.println("VALID");
+  } else {
+    Serial.println("INVALID");
+  }
+
+  clearCurrentCode();
 }
 
 void GameEngine::handleCodeEntry(char key) {
@@ -129,6 +137,14 @@ void GameEngine::displayCurrentClues() {
 void GameEngine::clearCurrentCode() {
   currentCode = "";
   displayCurrentCode();
+}
+
+bool GameEngine::isCodeValid() {
+  Puzzle* currentPuzzle = PuzzleData::getCurrentPuzzle();
+  if (currentPuzzle != nullptr) {
+    return currentCode == currentPuzzle->code;
+  }
+  return false;
 }
 
 bool GameEngine::isGameActive() {

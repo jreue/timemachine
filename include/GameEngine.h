@@ -44,6 +44,7 @@ class GameEngine {
     void displayCurrentCode();
     void displayCurrentClues();
     void clearCurrentCode();
+    bool isCodeValid();
     GameTime getRemainingGameTime();
     bool isGameActive();
     unsigned long getRemainingTime();
