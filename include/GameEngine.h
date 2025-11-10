@@ -8,6 +8,7 @@ class KeypadController;
 class BuzzerController;
 
 #define COUNTDOWN_MINUTES 12
+#define TOTAL_COUNTDOWN_SECONDS ((unsigned long)COUNTDOWN_MINUTES * 60)
 
 struct GameTime {
     int hours;

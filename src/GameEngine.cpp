@@ -183,18 +183,15 @@ unsigned long GameEngine::getRemainingGameSeconds() {
     return 0;
   }
 
-  unsigned long totalSeconds = (unsigned long)COUNTDOWN_MINUTES * 60;
   unsigned long elapsedSeconds = (millis() - gameState.gameStartTime) / 1000;
 
-  if (elapsedSeconds >= totalSeconds) {
+  if (elapsedSeconds >= TOTAL_COUNTDOWN_SECONDS) {
     return 0;
   }
 
-  return (totalSeconds - elapsedSeconds);
+  return (TOTAL_COUNTDOWN_SECONDS - elapsedSeconds);
 }
 
 int GameEngine::getRemainingTimePercentage(unsigned long remainingSeconds) {
-  unsigned long totalSeconds = (unsigned long)COUNTDOWN_MINUTES * 60;
-
-  return (int)((remainingSeconds * 100) / totalSeconds);
+  return (int)((remainingSeconds * 100) / TOTAL_COUNTDOWN_SECONDS);
 }
