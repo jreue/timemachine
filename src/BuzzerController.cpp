@@ -18,25 +18,29 @@ void BuzzerController::beep(int duration) {
 }
 
 void BuzzerController::playSuccess() {
-  int melody[] = {262, 330, 392};
-  int noteDurations[] = {100, 100, 200};
-  buzzer.playMelody(melody, noteDurations, 3);
+  int melody[] = {NOTE_C5, NOTE_E5, NOTE_G5};
+  int noteDurations[] = {8, 8, 4};  // eighth, eighth, quarter note
+  int length = sizeof(noteDurations) / sizeof(int);
+  buzzer.playMelody(melody, noteDurations, length);
 }
 
 void BuzzerController::playFailure() {
-  int melody[] = {392, 330, 262};
-  int noteDurations[] = {100, 100, 200};
-  buzzer.playMelody(melody, noteDurations, 3);
+  int melody[] = {NOTE_G5, NOTE_E5, NOTE_C5};
+  int noteDurations[] = {8, 8, 4};  // eighth, eighth, quarter note
+  int length = sizeof(noteDurations) / sizeof(int);
+  buzzer.playMelody(melody, noteDurations, length);
 }
 
 void BuzzerController::playWarning() {
-  int melody[] = {440, 440};
-  int noteDurations[] = {100, 100};
-  buzzer.playMelody(melody, noteDurations, 2);
+  int melody[] = {NOTE_A5, NOTE_A5};
+  int noteDurations[] = {8, 8};  // two eighth notes
+  int length = sizeof(noteDurations) / sizeof(int);
+  buzzer.playMelody(melody, noteDurations, length);
 }
 
 void BuzzerController::playVictory() {
-  int melody[] = {262, 294, 330, 349, 392, 440, 494, 523};
-  int noteDurations[] = {100, 100, 100, 100, 100, 100, 100, 200};
-  buzzer.playMelody(melody, noteDurations, 8);
+  int melody[] = {NOTE_C5, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_G5, NOTE_A5, NOTE_B5, NOTE_C6};
+  int noteDurations[] = {8, 8, 8, 8, 8, 8, 8, 4};  // scale up to high C
+  int length = sizeof(noteDurations) / sizeof(int);
+  buzzer.playMelody(melody, noteDurations, length);
 }
