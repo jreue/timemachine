@@ -179,17 +179,18 @@ GameTime GameEngine::getRemainingGameTime() {
 }
 
 unsigned long GameEngine::getRemainingGameSeconds() {
-  if (!gameState.gameActive) {
-    return 0;
-  }
-
-  unsigned long elapsedSeconds = (millis() - gameState.gameStartTime) / 1000;
+  unsigned long elapsedSeconds = getElapsedGameSeconds();
 
   if (elapsedSeconds >= TOTAL_COUNTDOWN_SECONDS) {
     return 0;
   }
 
   return (TOTAL_COUNTDOWN_SECONDS - elapsedSeconds);
+}
+
+unsigned long GameEngine::getElapsedGameSeconds() {
+  unsigned long elapsedSeconds = (millis() - gameState.gameStartTime) / 1000;
+  return elapsedSeconds;
 }
 
 int GameEngine::getRemainingTimePercentage(unsigned long remainingSeconds) {

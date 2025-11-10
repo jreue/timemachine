@@ -42,14 +42,20 @@ class GameEngine {
 
     void startGame();
     void processKeyInput(char key);
+
     void displayRemainingTime();
     void displayCurrentCode();
     void displayCurrentClues();
     void displayCurrentDate();
+
     void clearCurrentCode();
+
     bool isCodeValid();
-    GameTime getRemainingGameTime();
     bool isGameActive();
+
+    unsigned long getElapsedGameSeconds();
+
+    GameTime getRemainingGameTime();
     unsigned long getRemainingGameSeconds();
     int getRemainingTimePercentage(unsigned long remainingSeconds);
 
