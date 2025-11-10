@@ -13,6 +13,7 @@ struct GameTime {
     int hours;
     int minutes;
     int seconds;
+    int percentage;
 };
 
 struct GameState {
@@ -40,7 +41,7 @@ class GameEngine {
 
     void startGame();
     void processKeyInput(char key);
-    void updateGameState();
+    void displayRemainingTime();
     void displayCurrentCode();
     void displayCurrentClues();
     void displayCurrentDate();
@@ -48,8 +49,8 @@ class GameEngine {
     bool isCodeValid();
     GameTime getRemainingGameTime();
     bool isGameActive();
-    unsigned long getRemainingTime();
-    int getRemainingTimePercentage();
+    unsigned long getRemainingGameSeconds();
+    int getRemainingTimePercentage(unsigned long remainingSeconds);
 
     void handleClearCode();
     void handleCodeSubmission();

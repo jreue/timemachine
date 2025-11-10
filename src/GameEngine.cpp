@@ -38,7 +38,7 @@ void GameEngine::loop() {
     processKeyInput(key);
   }
 
-  updateGameState();
+  displayRemainingTime();
 }
 
 // ============================================================================
@@ -111,22 +111,17 @@ void GameEngine::handleCodeEntry(char key) {
   }
 }
 
-void GameEngine::updateGameState() {
+void GameEngine::displayRemainingTime() {
   unsigned long now = millis();
 
   if (gameState.gameActive && (now - lastUpdate >= 1000)) {
     GameTime remainingTime = getRemainingGameTime();
     lcdController.printGameTime(remainingTime, 12, 3);
 
-    int percentageTime = getRemainingTimePercentage();
-    String percentText = String(percentageTime) + "%   ";
+    String percentText = String(remainingTime.percentage) + "%   ";
     lcdController.printLine(percentText, 0, 3);
 
     lastUpdate = now;
-
-    if (getRemainingTime() == 0) {
-      gameState.gameActive = false;
-    }
   }
 }
 
@@ -169,7 +164,21 @@ bool GameEngine::isGameActive() {
   return gameState.gameActive;
 }
 
-unsigned long GameEngine::getRemainingTime() {
+GameTime GameEngine::getRemainingGameTime() {
+  GameTime time = {0, 0, 0, 0};
+
+  unsigned long remainingSeconds = getRemainingGameSeconds();
+
+  time.hours = remainingSeconds / 3600;
+  remainingSeconds %= 3600;
+  time.minutes = remainingSeconds / 60;
+  time.seconds = remainingSeconds % 60;
+  time.percentage = getRemainingTimePercentage(remainingSeconds);
+
+  return time;
+}
+
+unsigned long GameEngine::getRemainingGameSeconds() {
   if (!gameState.gameActive) {
     return 0;
   }
@@ -184,26 +193,8 @@ unsigned long GameEngine::getRemainingTime() {
   return (totalSeconds - elapsedSeconds);
 }
 
-GameTime GameEngine::getRemainingGameTime() {
-  GameTime time = {0, 0, 0};
-
-  unsigned long remainingSeconds = getRemainingTime();
-
-  time.hours = remainingSeconds / 3600;
-  remainingSeconds %= 3600;
-  time.minutes = remainingSeconds / 60;
-  time.seconds = remainingSeconds % 60;
-
-  return time;
-}
-
-int GameEngine::getRemainingTimePercentage() {
-  if (!gameState.gameActive) {
-    return 0;
-  }
-
+int GameEngine::getRemainingTimePercentage(unsigned long remainingSeconds) {
   unsigned long totalSeconds = (unsigned long)COUNTDOWN_MINUTES * 60;
-  unsigned long remainingSeconds = getRemainingTime();
 
   return (int)((remainingSeconds * 100) / totalSeconds);
 }
