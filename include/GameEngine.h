@@ -43,6 +43,7 @@ class GameEngine {
     void updateGameState();
     void displayCurrentCode();
     void displayCurrentClues();
+    void displayCurrentDate();
     void clearCurrentCode();
     bool isCodeValid();
     GameTime getRemainingGameTime();

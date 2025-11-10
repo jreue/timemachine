@@ -25,8 +25,6 @@ GameEngine::GameEngine(DateController& dateController, LcdController& lcdControl
 void GameEngine::initialize() {
   lcdController.printLine("Time Machine v1.24", 1, 1);
   lcdController.printLine("Press # to start", 1, 3);
-
-  dateController.showDate(12, 25, 1975);
 }
 
 // Main game loop
@@ -55,6 +53,7 @@ void GameEngine::startGame() {
 
   lcdController.clearScreen();
   displayCurrentClues();
+  displayCurrentDate();
 }
 
 void GameEngine::processKeyInput(char key) {
@@ -90,6 +89,7 @@ void GameEngine::handleCodeSubmission() {
       PuzzleData::advanceToNextPuzzle();
       lcdController.clearRows(0, 2);
       displayCurrentClues();
+      displayCurrentDate();
     } else {
       // All puzzles completed - victory!
       gameState.gameActive = false;
@@ -142,6 +142,13 @@ void GameEngine::displayCurrentClues() {
     lcdController.printLine(currentPuzzle->clue1, 0, 0);
     lcdController.printLine(currentPuzzle->clue2, 0, 1);
     lcdController.printLine(currentPuzzle->clue3, 0, 2);
+  }
+}
+
+void GameEngine::displayCurrentDate() {
+  Puzzle* currentPuzzle = PuzzleData::getCurrentPuzzle();
+  if (currentPuzzle != nullptr) {
+    dateController.showDate(currentPuzzle->month, currentPuzzle->day, currentPuzzle->year);
   }
 }
 

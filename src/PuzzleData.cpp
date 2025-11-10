@@ -3,9 +3,9 @@
 int PuzzleData::currentPuzzleIndex = 0;
 
 Puzzle PuzzleData::puzzles[PuzzleData::PUZZLE_COUNT] = {
-    {"FLUX CAPACITOR", "1.21 GIGAWATTS", "DELOREAN TIME", 12, 25, 1975, "1955"},
-    {"HOVERBOARD ERA", "SPORTS ALMANAC", "CLOCK TOWER", 10, 21, 2015, "1985"},
-    {"WESTERN TIMES", "TRAIN HEIST", "OLD WEST", 9, 2, 1885, "2025"}};
+    {"FLUX CAPACITOR", "1.21 GIGAWATTS", "DELOREAN TIME", 12, 25, 1975, "1111"},
+    {"HOVERBOARD ERA", "SPORTS ALMANAC", "CLOCK TOWER", 10, 21, 2015, "2222"},
+    {"WESTERN TIMES", "TRAIN HEIST", "OLD WEST", 9, 2, 1885, "3333"}};
 
 int PuzzleData::getCurrentPuzzleIndex() {
   return currentPuzzleIndex;
