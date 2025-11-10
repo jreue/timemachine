@@ -85,6 +85,17 @@ void GameEngine::handleCodeSubmission() {
 
   if (isCodeValid()) {
     Serial.println("VALID");
+
+    if (PuzzleData::hasNextPuzzle()) {
+      PuzzleData::advanceToNextPuzzle();
+      lcdController.clearRows(0, 2);
+      displayCurrentClues();
+    } else {
+      // All puzzles completed - victory!
+      gameState.gameActive = false;
+      lcdController.clearRows(0, 2);
+      Serial.println("ALL PUZZLES COMPLETE!");
+    }
   } else {
     Serial.println("INVALID");
   }
