@@ -118,7 +118,7 @@ void GameEngine::displayRemainingTime() {
     GameTime remainingTime = getRemainingGameTime();
     lcdController.printGameTime(remainingTime, 12, 3);
 
-    String percentText = String(remainingTime.percentage) + "%   ";
+    String percentText = String(remainingTime.percentage) + "%  ";
     lcdController.printLine(percentText, 0, 3);
 
     lastUpdate = now;
@@ -126,9 +126,12 @@ void GameEngine::displayRemainingTime() {
 }
 
 void GameEngine::displayCurrentCode() {
-  // Display in columns 5-10 (centered between 4-11)
-  // Format: " XXXX " with spaces around it
-  lcdController.printLine(" " + currentCode + "    ", 5, 3);
+  // Display in columns 6-9 with trailing spaces to fill 4 characters
+  String paddedCode = currentCode;
+  while (paddedCode.length() < 4) {
+    paddedCode += " ";
+  }
+  lcdController.printLine(paddedCode, 6, 3);
 }
 
 void GameEngine::displayCurrentClues() {
